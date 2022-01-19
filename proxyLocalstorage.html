@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>proxyLocalstorage</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        console.log("代理页面加载完毕2....");
+        window.addEventListener("message", (event) => {
+            const {
+                body: {
+                    funcName,
+                    keyName,
+                    setValue
+                }
+            } = event.data;
+            console.log("funcName", funcName);
+            if (funcName === "getLocalstorages") { // 需要返回值
+                let responseData = [];
+                const app_task_id_list = window.localStorage.getItem('app_task_id_list');
+                // responseData.app_task_id_list = app_task_id_list;
+                responseData.push({
+                    key:'app_task_id_list',
+                    value:app_task_id_list,
+                });
+                if (app_task_id_list) {
+                    JSON.parse(app_task_id_list).forEach(id => {
+                        const itemValue = window.localStorage.getItem(id);
+                        if (itemValue) {
+                            responseData.push({
+                                key:id,
+                                value:itemValue,
+                            });
+                        }
+                    });
+                }
+                window.parent.postMessage({
+                    body: {
+                        type: "proxy-featch-localstorage",
+                        responseData
+                    }
+                }, "*");
+            } else if (funcName === "setItem") {
+                window.localStorage.setItem(keyName, setValue)
+            } else {
+                window.localStorage.removeItem(keyName)
+            }
+        }, false);
+    </script>
+</body>
+
+</html>

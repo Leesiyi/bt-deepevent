@@ -161,7 +161,6 @@ export default {
         const getRewards = async(taskId,stageId)=> {
             await GetTaskRewards({taskId,stageId})
         }
-        console.log('timee',new Date(new Date().toUTCString()).getTime(),new Date().getTime(),new Date().toUTCString());
         /**
          * @description: getCache:获取本地缓存
          * @param {}
