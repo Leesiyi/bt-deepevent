@@ -1,45 +1,44 @@
 <template>
     <div class="task-list">
-        <div v-if="localList.lenght === 0" class="task-list-empty">
+        <div v-if="localList.length === 0" class="task-list-empty">
             <div class="title">{{$t('Sorry')}}</div>
             <div class="content">{{$t('The current device has downloaded the')}}</div>
             <div class="content"><span>{{$t('relevant task APP')}}</span></div>
             <div class="content">{{$t('To participate in the event, switch phones or invite friends to complete tasks and earn commissions')}}</div>
         </div>
         <div v-else>
-            
-                <div v-for="(item,index) in localList" :key="item.offerId" :class="['task-list-item',{'mgt-0':index === 0},{'time-over':item.windowTimeOver}]">
-                    <div v-if="item.taskThreshold && (item.taskThreshold > item.taskCompleted)" class="lock" @click="clickLock(item)">
-                        <div>
-                            <div class="icon"></div>
-                            <div class="text">{{$t('Complete')}} <span>{{item.taskThreshold - item.taskCompleted}}</span> {{$t('tasks to unlock')}}</div>
-                        </div>
+            <div v-for="(item,index) in localList" :key="item.offerId" :class="['task-list-item',{'mgt-0':index === 0},{'time-over':item.windowTimeOver}]">
+                <div v-if="item.taskThreshold && (item.taskThreshold > item.taskCompleted)" class="lock" @click="clickLock(item)">
+                    <div>
+                        <div class="icon"></div>
+                        <div class="text">{{$t('Complete')}} <span>{{item.taskThreshold - item.taskCompleted}}</span> {{$t('tasks to unlock')}}</div>
                     </div>
-                    <div class="header">
-                        <div class="icon">
-                            <img-component :src="item.icon"/>
-                        </div>
-                        <div>
-                            <div class="title">{{item.title}}</div>
-                            <div class="sub-title">{{item.brief}}</div>
-                        </div>
+                </div>
+                <div class="header">
+                    <div class="icon">
+                        <img-component :src="item.icon"/>
                     </div>
-                    <div class="main">
-                        <div v-if="item.description" class="content" v-html="item.description"></div>
+                    <div>
+                        <div class="title">{{item.title}}</div>
+                        <div class="sub-title">{{item.brief}}</div>
                     </div>
-                    <div class="footer">
-                        <div :class="['button-group',`${item.localState}`,{'window-time':item.lookback && item.localState === 'going'}]">
-                            <div :class="['button-left',`${vueState.pageInfo.lang}`]" @click="clickTask(item)">{{stateText(item)}}
-                                <div v-if="item.lookback && item.localState === 'going'" class="count-down">
-                                    <span>{{('Only')}}</span><div class="icon"></div><count-down :time="(item.lookback * 1000) - new Date(new Date().toUTCString()).getTime()" @finish="windowTimeOver(item)"/><span>&nbsp;{{$t('left to')}}</span>
-                                </div>
-                                <div v-if="item.localState !== 'completed'" class="arrow"></div>
+                </div>
+                <div class="main">
+                    <div v-if="item.description" class="content" v-html="item.description"></div>
+                </div>
+                <div class="footer">
+                    <div :class="['button-group',`${item.localState}`,{'window-time':item.lookback && item.localState === 'going'}]">
+                        <div :class="['button-left',`${vueState.pageInfo.lang}`]" @click="clickTask(item)">{{stateText(item)}}
+                            <div v-if="item.lookback && item.localState === 'going'" class="count-down">
+                                <span>{{('Only')}}</span><div class="icon"></div><count-down :time="(item.lookback * 1000) - new Date(new Date().toUTCString()).getTime()" @finish="windowTimeOver(item)"/><span>&nbsp;{{$t('left to')}}</span>
                             </div>
-                            <div class="button-right" @click="clickWithdraw(item)">{{$t('Withdrawal')}}</div>
+                            <div v-if="item.localState !== 'completed'" class="arrow"></div>
                         </div>
+                        <div class="button-right" @click="clickWithdraw(item)">{{$t('Withdrawal')}}</div>
                     </div>
                 </div>
             </div>
+        </div>
             
         
     </div>
@@ -64,6 +63,7 @@ export default {
         const vueState = props.vueState
         const {proxy} = getCurrentInstance()
         const localList = computed(()=>{
+            console.log('props',props.list);
             return props.list
         })
         const stateText = (item)=> {
@@ -267,6 +267,7 @@ export default {
                     position: relative;
                     &.pt{
                         font-size: .14rem;
+                        letter-spacing: -1px;
                     }
                     .count-down{
                         position: absolute;

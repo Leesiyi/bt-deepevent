@@ -1,0 +1,199 @@
+[
+    {
+        "brief": "ExpertOption - Mobile Trading",
+        "trackingURL": "http://101.251.197.221:8081/cs/v4/4f0zvfdI52DfOBeJq6tI8z?app=com.expertoption&b=BTC&c=202052964&d=9770d7de-ccf2-4b57-a62c-415e66123790&e1=IN&f=96&n=org.purson.yowin&u=u09-0ab2cc4b-4988-4509-8834-ab3f45295y93",
+        "appName": "ExpertOption - Mobile Trading",
+        "bundleId": "BTC",
+        "icon": "https://play-lh.googleusercontent.com/sKLE0l5Kbq2J9zGjRLUFB_AwSpLoFlTX6nA8NQRQp1luuZsrTShaFlROPHsaUBLA60s=s180",
+        "clickId": "4f0zvfdI52DfOBeJq6tI8z",
+        "description": "Complete the steps below to get rewards\r\n<br>\r\n<font color=\"#ff0000\" >Step 1: Click \"get\", you will open the Google App Store  to download</font>\r\n<br>\r\nStep 2: Install the downloaded APK\r\n<br>\r\n<font color=\"#ff0000\" >Step 3:Open the app & register in app</font>\r\n<br>\r\n<br> \r\nAfter completing the above steps, the reward will be automatically credited to your account\r\n<br>\r\nTips:\r\n<br>\r\nIf you have installed this app before, you will not get rewards",
+        "videos": 8,
+        "completed": 12317,
+        "title": "ExpertOption - Mobile Trading",
+        "impressLink": "http://101.251.197.221:8081/mp/v4/4f0zvfdI52DfOBeJq6tI8z?app=com.expertoption&b=BTC&c=202052964&d=9770d7de-ccf2-4b57-a62c-415e66123790&e1=IN&f=96&n=org.purson.yowin&u=u09-0ab2cc4b-4988-4509-8834-ab3f45295y93",
+        "tags": [
+            "honor"
+        ],
+        "layout": "0",
+        "expired": 1642703116,
+        "slide": [
+            ""
+        ],
+        "taskCompleted": 0,
+        "appId": "com.expertoption",
+        "prop": "{\"tips_frt_show\":\"false\",\"tips_frt_desc\":\"\",\"tips_bck_show\":\"false\",\"tips_bck_desc\":\"\",\"plot_show\":\"false\",\"plot\":\"\"}",
+        "taskThreshold": 5,
+        "stages": [
+            {
+                "brief": "Install the downloaded APK",
+                "issue": 1,
+                "eventType": "REGISTER",
+                "state": "completed",
+                "type": 0,
+                "stageId": "202052964_1",
+                "coin": 80
+            },
+            {
+                "brief": "apply for a loan",
+                "issue": 2,
+                "eventType": "PURCHASE",
+                "state": "done",
+                "type": 0,
+                "stageId": "202052964_2",
+                "coin": 160000
+            }
+        ],
+        "offerId": "202052964",
+        "theme": "purple",
+        "category": 1,
+        "promotion": 1
+    },
+    {
+        "trackingURL": "http://101.251.197.221:8081/cs/v4/4arQS6PyKXtNdg9CMGgcVs?app=com.ticno.olymptrade&b=BTC&c=201231429&d=9770d7de-ccf2-4b57-a62c-415e66123790&e1=IN&f=96&n=org.purson.yowin&u=u09-0ab2cc4b-4988-4509-8834-ab3f45295y93",
+        "icon": "https://play-lh.googleusercontent.com/7izqwd7eRb78fenn-XYTyi6otuTw34S2VO-SGGOZCfATQkd2yJRfPCgK04uYuznqzyo=s180",
+        "clickId": "4arQS6PyKXtNdg9CMGgcVs",
+        "description": "Complete the steps below to get rewards\r\n<br>\r\n<font color=\"#ff0000\" >Step 1: Click \"get\", you will open the Google App Store  to download</font>\r\n<br>\r\nStep 2: Install the downloaded APK\r\n<br>\r\n<font color=\"#ff0000\" >Step 3:Open the app & register in app</font>\r\n<br>\r\n<br> \r\nAfter completing the above steps, the reward will be automatically credited to your account\r\n<br>\r\nTips:\r\n<br>\r\nIf you have installed this app before, you will not get rewards",
+        "videos": 8,
+        "title": "Olymp Trade forbid App For Trading",
+        "expired": 1642703307,
+        "appId": "com.ticno.olymptrade",
+        "prop": "{\"tips_frt_show\":\"false\",\"tips_frt_desc\":\"\",\"tips_bck_show\":\"false\",\"tips_bck_desc\":\"\",\"plot_show\":\"false\",\"plot\":\"\"}",
+        "taskThreshold": 2,
+        "theme": "purple",
+        "brief": "Easy register in app forbid you can get 1800.0 coins.",
+        "appName": "Olymp Trade - App For Trading",
+        "landingPage": "https://play.google.com/store/apps/details?id=com.ticno.olymptrade",
+        "bundleId": "BTC",
+        "completed": 12,
+        "impressLink": "http://101.251.197.221:8081/mp/v4/4arQS6PyKXtNdg9CMGgcVs?app=com.ticno.olymptrade&b=BTC&c=201231429&d=9770d7de-ccf2-4b57-a62c-415e66123790&e1=IN&f=96&n=org.purson.yowin&u=u09-0ab2cc4b-4988-4509-8834-ab3f45295y93",
+        "tags": [
+            "New"
+        ],
+        "layout": "1",
+        "slide": [
+            ""
+        ],
+        "taskCompleted": 0,
+        "stages": [
+            {
+                "brief": "register",
+                "issue": 1,
+                "eventType": "REGISTER",
+                "state": "",
+                "type": 0,
+                "stageId": "201231429_1",
+                "coin": 500
+            },
+            {
+                "brief": "ftd",
+                "issue": 2,
+                "eventType": "FTD",
+                "state": "",
+                "type": 0,
+                "stageId": "201231429_2",
+                "coin": 175000
+            }
+        ],
+        "offerId": "201231429",
+        "category": 1,
+        "promotion": 1
+    },
+    {
+        "brief": "IQ Option – Online Investing Platform",
+        "trackingURL": "http://101.251.197.221:8081/cs/v4/FL4DWudTARpHkOq6p48yI?app=com.iqoption&b=BTC&c=205662931&d=9770d7de-ccf2-4b57-a62c-415e66123790&e1=IN&f=96&n=org.purson.yowin&u=u09-0ab2cc4b-4988-4509-8834-ab3f45295y93",
+        "appName": "IQ Option – Online Investing Platform",
+        "bundleId": "BTC",
+        "icon": "https://play-lh.googleusercontent.com/9vYKx4oKSp219brQhwK7xSpGOHoi2IFBpBLUAdWymMlFppOINGkl7n7aFeLlsHfIP-w=s180",
+        "clickId": "FL4DWudTARpHkOq6p48yI",
+        "description": "Complete the steps below to get rewards\r\n<br>\r\n<font color=\"#ff0000\" >Step 1: Click \"get\", you will open the Google App Store  to download</font>\r\n<br>\r\nStep 2: Install the downloaded APK\r\n<br>\r\n<font color=\"#ff0000\" >Step 3:Open the app & register in app</font>\r\n<br>\r\n<br> \r\nAfter completing the above steps, the reward will be automatically credited to your account\r\n<br>\r\nTips:\r\n<br>\r\nIf you have installed this app before, you will not get rewards",
+        "videos": 8,
+        "completed": 1232,
+        "title": "IQ Option – Online Investing Platform",
+        "impressLink": "http://101.251.197.221:8081/mp/v4/FL4DWudTARpHkOq6p48yI?app=com.iqoption&b=BTC&c=205662931&d=9770d7de-ccf2-4b57-a62c-415e66123790&e1=IN&f=96&n=org.purson.yowin&u=u09-0ab2cc4b-4988-4509-8834-ab3f45295y93",
+        "tags": [
+            "beaty"
+        ],
+        "layout": "1",
+        "expired": 1642703063,
+        "slide": [
+            ""
+        ],
+        "taskCompleted": 0,
+        "appId": "com.iqoption",
+        "prop": "{\"tips_frt_show\":\"false\",\"tips_frt_desc\":\"\",\"tips_bck_show\":\"false\",\"tips_bck_desc\":\"\",\"plot_show\":\"false\",\"plot\":\"\"}",
+        "taskThreshold": 2,
+        "stages": [
+            {
+                "brief": "apply for a loan",
+                "issue": 2,
+                "eventType": "FTD",
+                "state": "",
+                "type": 0,
+                "stageId": "205662931_1",
+                "coin": 25000
+            },
+            {
+                "brief": "Install the downloaded APK",
+                "issue": 1,
+                "eventType": "INSTALL",
+                "state": "",
+                "type": 0,
+                "stageId": "205662931_2",
+                "coin": 5000
+            }
+        ],
+        "offerId": "205662931",
+        "theme": "purple",
+        "category": 1,
+        "promotion": 1
+    },
+    {
+        "brief": "Bybit: Crypto Trading Exchange",
+        "trackingURL": "http://101.251.197.221:8081/cs/v4/1Al7aGaz1dxJkxVY3Ruuiy?app=com.bybit.app&b=BTC&c=205876343&d=9770d7de-ccf2-4b57-a62c-415e66123790&e1=IN&f=96&n=org.purson.yowin&u=u09-0ab2cc4b-4988-4509-8834-ab3f45295y93",
+        "appName": "Bybit: Crypto Trading Exchange",
+        "bundleId": "BTC",
+        "icon": "https://play-lh.googleusercontent.com/3WgCk7-wdyQaSbSGNCuRk1iUx_RZy64nb94AsK5Pqjd9_wjWnOggN86hfHlppN3lJP_q=s180",
+        "clickId": "1Al7aGaz1dxJkxVY3Ruuiy",
+        "description": "Complete the steps below to get rewards\r\n<br>\r\n<font color=\"#ff0000\" >Step 1: Click \"get\", you will open the Google App Store  to download</font>\r\n<br>\r\nStep 2: Install the downloaded APK\r\n<br>\r\n<font color=\"#ff0000\" >Step 3:Open the app & register in app</font>\r\n<br>\r\n<br> \r\nAfter completing the above steps, the reward will be automatically credited to your account\r\n<br>\r\nTips:\r\n<br>\r\nIf you have installed this app before, you will not get rewards",
+        "videos": 8,
+        "completed": 1312,
+        "title": "Bybit: Crypto Trading Exchange",
+        "impressLink": "http://101.251.197.221:8081/mp/v4/1Al7aGaz1dxJkxVY3Ruuiy?app=com.bybit.app&b=BTC&c=205876343&d=9770d7de-ccf2-4b57-a62c-415e66123790&e1=IN&f=96&n=org.purson.yowin&u=u09-0ab2cc4b-4988-4509-8834-ab3f45295y93",
+        "tags": [
+            "HOT"
+        ],
+        "layout": "1",
+        "expired": 1642703001,
+        "slide": [
+            ""
+        ],
+        "taskCompleted": 0,
+        "appId": "com.bybit.app",
+        "prop": "{\"tips_frt_show\":\"false\",\"tips_frt_desc\":\"\",\"tips_bck_show\":\"false\",\"tips_bck_desc\":\"\",\"plot_show\":\"false\",\"plot\":\"\"}",
+        "taskThreshold": 3,
+        "stages": [
+            {
+                "brief": "Install the downloaded APK",
+                "issue": 1,
+                "eventType": "INSTALL",
+                "state": "",
+                "type": 0,
+                "stageId": "205876343_1",
+                "coin": 500
+            },
+            {
+                "brief": "apply for a loan",
+                "issue": 2,
+                "eventType": "FTD",
+                "state": "",
+                "type": 0,
+                "stageId": "205876343_3",
+                "coin": 24000
+            }
+        ],
+        "offerId": "205876343",
+        "theme": "purple",
+        "category": 1,
+        "promotion": 1
+    }
+]

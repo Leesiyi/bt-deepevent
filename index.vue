@@ -26,7 +26,7 @@
     </div>
 </template>
 <script>
-import { inject, reactive, toRefs,onMounted, computed, onUnmounted, getCurrentInstance } from 'vue'
+import { inject, reactive, toRefs,onMounted, computed, onUnmounted, getCurrentInstance, nextTick } from 'vue'
 import TaskList from './components/TaskList/index.vue'
 import rulesModal from './modal/rulesModal.vue'
 import quickWithdrawModal from './modal/quickWithdrawModal.vue'
@@ -40,6 +40,7 @@ import yowinCoin from './assets/images/icon_coin_yowin.svg'
 import cashCoin from './assets/images/icon_coin_hellocash.svg'
 import dailybonusCoin from './assets/images/icon_coin_dailybonus.svg'
 import yocoinsCoin from './assets/images/icon_coin_yocoins.svg'
+import mockData from './assets/json/data.json'
 export default {
     components:{TaskList,rulesModal,quickWithdrawModal,rewardsModal},
     props:{
@@ -47,6 +48,8 @@ export default {
         vueState:{}
     },
     setup(props) {
+        // console.log(eval('((type)=>{return `123 ${type} 213123`})(12312)'));
+        // eval(`((type)=>{return `123 ${type} 213123`})(12312)`)
         // initProxyLocalStorage()
         const {proxy} = getCurrentInstance()
         const vueState = props.vueState
@@ -62,7 +65,8 @@ export default {
             statusUpdateList:[],        //状态更新列表
             completedList:[],       //已完成任务列表
             unUpdateIdList:[],      //状态未更新列表
-            initTimes:0
+            initTimes:0,
+            isSdk2:/^http/.test(window.location.href)
         })
         const rulesModalData = reactive({
             show:false
@@ -102,11 +106,17 @@ export default {
                         openBrowser(item.landingPage ? item.landingPage : item.trackingURL)
                     case 'done':
                         const rewardStage = item.stages.find(item=>item.state === 'done')
+                        Toast.loading({duration:0})
                         try{
-                            await getRewards(rewardStage.stageId)
+                            await GetTaskRewards({
+                                taskId:item.offerId,
+                                stageId:rewardStage.stageId
+                            })
                             rewardsModalData.coin = rewardStage.coin
                             rewardsModalData.show = true
+                            Toast.clear()
                         }catch(e){
+                            setTimeout(()=>{Toast.clear()},3000)
                             console.log(e);
                         }
                         init()
@@ -158,9 +168,6 @@ export default {
                 console.log(error);
             });
         }
-        const getRewards = async(taskId,stageId)=> {
-            await GetTaskRewards({taskId,stageId})
-        }
         /**
          * @description: getCache:获取本地缓存
          * @param {}
@@ -172,7 +179,7 @@ export default {
             state.idList && state.idList.length && state.idList.forEach((item)=>{
                 state.cacheList.push(JSON.parse(localStorage.getItem(item)))
             })
-            console.log('getCache');
+            console.log('getCache',state.cacheList);
         }
         /**
          * @description: getData:获取服务端数据
@@ -180,16 +187,18 @@ export default {
          * @return:void
          */
         const getData = async()=> {
+            Toast.loading({duration:0})
             try{
                 const task = await GetTask({
                     bundle:vueState.bundle,
-                    // channel:'primetask',
                     extension:vueState.pageInfo.header?.country || 'IN',
-                    // campaign:'',
                     bundleList:['BTC']
                 })
+                Toast.clear()
                 state.taskList = task
+                // state.taskList = mockData
             }catch(e){
+                setTimeout(()=>{Toast.clear()},3000)
                 console.log(e);
             }
             console.log('getData');
@@ -255,7 +264,7 @@ export default {
                 localStorage.setItem(`${item.offerId}`,JSON.stringify(item))
             })
             localStorage.setItem('app_task_id_list',JSON.stringify(state.idList))
-            console.log('setCache');
+            console.log('setCache',state.idList);
         }
         /**
          * @description: filterCache:过滤本地缓存
@@ -278,21 +287,27 @@ export default {
             state.idList.forEach((item,index)=>{
                 //新id列表没有，本地缓存存在的任务
                 if(state.newIdList.indexOf(item) === -1){
+                    console.log(1111111111);
                     //缓存中获取任务
                     let task = JSON.parse(localStorage.getItem(item) || '{}')
                     //如果任务状态为‘completed’且缓存时间小于3天，存入已完成任务列表
                     if(task.localState === 'completed' && new Date().getTime()-task.localTs < 259200000){
+                        console.log('cache completed');
                         state.completedList.push(task)
                         state.newIdList.push(item)
+                        console.log(state.completedList);
                     }else if(task.localState === 'completed' && new Date().getTime()-task.localTs >= 259200000){   //如果任务状态为‘completed’且缓存时间大于等于3天删除本地缓存
+                        console.log('delete completed');
                         localStorage.removeItem(item)
                         state.idList.splice(index,1)
                     }else if(task.localState === 'done' && new Date().getTime()-task.localTs < 5184000000){
                         state.taskList.push(task)
                         state.newIdList.push(item)
+                        console.log('cache done');
                     }else{     //其余情况存入更新状态列表，刷新任务状态
                         state.offersList.push({channel:task.bundleId,offerId:task.offerId})
                         state.unUpdateIdList.push(task.offerId)
+                        console.log('update status');
                     }
                 }
             })
@@ -362,7 +377,7 @@ export default {
          * @return:void
          */
         const concatCompletedTask = ()=> {
-            state.taskList.concat(state.completedList)
+            state.taskList = state.taskList.concat(state.completedList)
             state.completedList = []
             console.log('concatCompletedTask');
         }
@@ -372,9 +387,10 @@ export default {
          * @return:void
          */
         const init = async()=>{
-            // getCache()
+            getCache()
             await getData()
             setData()
+            console.log(state.isFirst);
             state.isFirst ? setCache() : filterCache()
             state.offersList.length && await getStatus()
             updateStatus()
@@ -382,11 +398,11 @@ export default {
             concatCompletedTask()
             state.initTimes++
         }
-        initProxyLocalStorage(getCache)
+        !state.isSdk2 && getCache()
         
         onMounted(() => {
             window.AdSDK.addEventListener('ad_show',adShow)
-            vueState.EventEmitter.immediately('afterRegist',init,vueState.pageStatus.afterRegist)
+            vueState.EventEmitter.immediately('afterRegist',initProxyLocalStorage(init),vueState.pageStatus.afterRegist)
         })
         onUnmounted(()=>{
             window.AdSDK.removeEventListener('ad_show',adShow)

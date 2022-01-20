@@ -118,17 +118,18 @@ export default {
                 }
             }
         }
-        // &::after {
-        //     position: fixed;
-        //     bottom: 0;
-        //     left: 0;
-        //     content: '';
-        //     display: block;
-        //     width: 100%;
-        //     height: 0.6rem;
-        //     background: linear-gradient(180deg, rgba(255, 253, 248, 0), #fffdf8 100%, #fffdf8 100%);
-        //     border-radius: 0 0 0.16rem 0.16rem;
-        // }
+        &::after {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            content: '';
+            display: block;
+            width: 100%;
+            height: 0.6rem;
+            background: linear-gradient(180deg, rgba(255, 253, 248, 0), #fffdf8 100%, #fffdf8 100%);
+            border-radius: 0 0 0.16rem 0.16rem;
+            pointer-events: none;
+        }
         .main {
             padding: 0.16rem 0.2rem 0.2rem;
             height: 100%;
