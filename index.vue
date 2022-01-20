@@ -65,9 +65,10 @@ export default {
             statusUpdateList:[],        //状态更新列表
             completedList:[],       //已完成任务列表
             unUpdateIdList:[],      //状态未更新列表
-            initTimes:0,
-            isSdk2:/^http/.test(window.location.href)
+            initTimes:0,        //init执行次数
+            isSdk2:/^http/.test(window.location.href)       //是否是sdk2.0
         })
+        
         const rulesModalData = reactive({
             show:false
         })
