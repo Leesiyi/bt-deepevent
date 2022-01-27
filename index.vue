@@ -66,9 +66,10 @@ export default {
             completedList:[],       //已完成任务列表
             unUpdateIdList:[],      //状态未更新列表
             initTimes:0,        //init执行次数
-            isSdk2:/^http/.test(window.location.href)       //是否是sdk2.0
+            isSdk2:/^http/.test(window.location.href),      //是否为sdk2.0
+            loaded:false        //获取服务端数据完成
         })
-        
+        console.log('isSdk2',state.isSdk2);
         const rulesModalData = reactive({
             show:false
         })
@@ -78,7 +79,7 @@ export default {
         const rewardsModalData = reactive({
             show:false,
             coin:0,
-            iconCoin:computed(()=>{
+            iconCoin:computed(()=>{     //不同app的金币icon
                 switch (vueState.bundle) {
                     case 'com.hello.coins.cash':
                         return cashCoin;
@@ -139,7 +140,7 @@ export default {
                     })
                 }
             },300),
-            windowTimeOver:(item)=>{
+            windowTimeOver:(item)=>{        //窗口期倒计时结束，隐藏任务
                 console.log('windowTimeOver');
                 try{
                     state.taskList.forEach((el)=>{
@@ -154,8 +155,8 @@ export default {
             }
         })
         const propsList = computed(()=>{
-            console.log(state.taskList.length ? 'taskList' : 'cacheList',state.taskList,state.cacheList);
-            return state.taskList.length ? state.taskList : state.cacheList
+            console.log(state.loaded ? 'taskList' : 'cacheList',state.taskList,state.cacheList,new Date().getTime());
+            return state.loaded ? state.taskList : state.cacheList      //首先显示本地缓存任务，服务端数据获取成功显示服务端数据
         })
         const adShow = debounce(async()=> {
             state.initTimes && await init()
@@ -175,9 +176,9 @@ export default {
          * @return:void
          */
         const getCache = ()=> {
-            state.idList = JSON.parse(localStorage.getItem('app_task_id_list') || '[]')
-            state.isFirst = !Boolean(localStorage.getItem('app_task_id_list'))
-            state.idList && state.idList.length && state.idList.forEach((item)=>{
+            state.idList = JSON.parse(localStorage.getItem('app_task_id_list') || '[]')     //获取本地任务id列表
+            state.isFirst = !Boolean(localStorage.getItem('app_task_id_list'))      //判断是否为第一次进入
+            state.idList && state.idList.length && state.idList.forEach((item)=>{       //获取本地缓存任务
                 state.cacheList.push(JSON.parse(localStorage.getItem(item)))
             })
             console.log('getCache',state.cacheList);
@@ -193,11 +194,13 @@ export default {
                 const task = await GetTask({
                     bundle:vueState.bundle,
                     extension:vueState.pageInfo.header?.country || 'IN',
-                    bundleList:['BTC']
+                    bundleList:['BTC'],
+                    options:{noCompleted:true}
                 })
                 Toast.clear()
                 state.taskList = task
                 // state.taskList = mockData
+                state.loaded = true
             }catch(e){
                 setTimeout(()=>{Toast.clear()},3000)
                 console.log(e);
@@ -214,9 +217,9 @@ export default {
                 const localState = setState(item.stages)
                 const localItem = {
                     ...item,
-                    localState,
-                    localTs:new Date().getTime(),
-                    totalCoin:item.stages.reduce((total,currentVal)=>{
+                    localState,     //任务状态
+                    localTs:new Date().getTime(),       //更新时间戳
+                    totalCoin:item.stages.reduce((total,currentVal)=>{      //任务总金币
                         return (total + currentVal.coin || 0)
                     },0)
                 }
@@ -234,7 +237,7 @@ export default {
             let undone = 0
             let completed = 0
             for(let i = 0;i < length;i++){
-                if(list[i].state === 'done'){
+                if(list[i].state === 'done'){       //如果有一个阶段任务状态为done则整个任务为done
                     return 'done'
                 }
                 if(list[i].state === 'completed'){
@@ -244,13 +247,13 @@ export default {
                     undone++
                 }
             }
-            if(completed === length){
+            if(completed === length){       //阶段任务状态全部completed，整个任务状态为completed
                 return 'completed'
             }
-            if(undone === length){
+            if(undone === length){      //阶段任务状态全部为‘’，整个任务状态为start
                 return 'start'
             }else{
-                return 'going'
+                return 'going'      //阶段任务存在‘’和completed，任务状态为going
             }
         }
         /**
@@ -280,19 +283,16 @@ export default {
                 state.newIdList.push(item.offerId)
                 //如果本地缓存不存在该任务
                 if(state.idList.indexOf(item.offerId) === -1){
+                    console.log('new task');
                     //存入id列表
                     state.idList.push(item.offerId)
                 }
             })
             // console.log(state.taskList,state.idList,state.newIdList);
             state.idList.forEach((item,index)=>{
-                //新id列表没有，本地缓存存在的任务
-                if(state.newIdList.indexOf(item) === -1){
-                    console.log(1111111111);
-                    //缓存中获取任务
-                    let task = JSON.parse(localStorage.getItem(item) || '{}')
-                    //如果任务状态为‘completed’且缓存时间小于3天，存入已完成任务列表
-                    if(task.localState === 'completed' && new Date().getTime()-task.localTs < 259200000){
+                if(state.newIdList.indexOf(item) === -1){       //新id列表没有，本地缓存存在的任务
+                    let task = JSON.parse(localStorage.getItem(item) || '{}')       //缓存中获取任务
+                    if(task.localState === 'completed' && new Date().getTime()-task.localTs < 259200000){       //如果任务状态为‘completed’且缓存时间小于3天，存入已完成任务列表
                         console.log('cache completed');
                         state.completedList.push(task)
                         state.newIdList.push(item)
@@ -301,10 +301,6 @@ export default {
                         console.log('delete completed');
                         localStorage.removeItem(item)
                         state.idList.splice(index,1)
-                    }else if(task.localState === 'done' && new Date().getTime()-task.localTs < 5184000000){
-                        state.taskList.push(task)
-                        state.newIdList.push(item)
-                        console.log('cache done');
                     }else{     //其余情况存入更新状态列表，刷新任务状态
                         state.offersList.push({channel:task.bundleId,offerId:task.offerId})
                         state.unUpdateIdList.push(task.offerId)
@@ -322,16 +318,23 @@ export default {
          */
         const updateStatus = ()=> {
             state.statusUpdateList.length && state.statusUpdateList.forEach((item)=>{
-                const task = JSON.parse(localStorage.getItem(item.campaign) || '{}')
-                const isShow = state.newIdList.indexOf(item.campaign) === -1 ? false : true
-                const index = task.stages.findIndex((el)=>{return el.stageId === item.stageId})
-                if(index !== -1 && task.stages[index].state !== item.status){
-                    task.stages[index].state = item.status
-                    task.localState = setState(task.stages)
-                    task.localTs = new Date().getTime()
-                    localStorage.setItem(item.campaign,JSON.stringify(task))
-                    !isShow && state.taskList.push(task) && state.newIdList.push(item.campaign)
-                    state.unUpdateIdList.indexOf(item.campaign) > -1 && state.unUpdateIdList.splice(state.unUpdateIdList.indexOf(item.campaign))
+                const task = JSON.parse(localStorage.getItem(item.campaign) || '{}')        //获取本地缓存任务
+                const isShow = state.newIdList.indexOf(item.campaign) === -1 ? false : true     //是否已经存入任务列表
+                const index = task.stages.findIndex((el)=>{return el.stageId === item.stageId})     //服务端返回任务状态不为‘’的阶段
+                if(index !== -1 && task.stages[index].state !== item.status){       //是否是更新的任务
+                    task.stages[index].state = item.status      //更新阶段状态
+                    task.localState = setState(task.stages)     //更新任务状态
+                    task.localTs = new Date().getTime()     //更新任务时间戳
+                    localStorage.setItem(item.campaign,JSON.stringify(task))        //更新本地缓存
+                    if(!isShow){
+                        if(task.localState === 'completed'){        //更新后状态已完成，存入已完成列表
+                            state.completedList.push(task)
+                        }else{
+                            state.taskList.push(task)       //如果不在任务列表，则存入
+                        }
+                        state.newIdList.push(item.campaign)
+                    }
+                    state.unUpdateIdList.indexOf(item.campaign) > -1 && state.unUpdateIdList.splice(state.unUpdateIdList.indexOf(item.campaign))        //从未更新列表删除
                 }
             })
             state.statusUpdateList = []
@@ -344,12 +347,19 @@ export default {
          * @return:void
          */
         const updateCache = ()=> {
+            console.log('unUpdateIdList',state.unUpdateIdList);
             state.unUpdateIdList.length && state.unUpdateIdList.forEach((item)=>{
                 const task = JSON.parse(localStorage.getItem(item))
-                if(new Date().getTime() - task.localTs >= 259200000){
-                    localStorage.removeItem(item)
+                if(task.localState === 'done' && new Date().getTime()-task.localTs < 5184000000){     //如果任务状态为done且缓存时间小于60天，返回任务
+                    state.taskList.push(task)
+                    state.newIdList.push(item)
+                    console.log('cache done');
+                }else if(new Date().getTime() - task.localTs >= 259200000){       //未更新状态列表内任务缓存时间是否大于三天，大于则删除
+                    console.log('remove');
+                    localStorage.removeItem(item)   
                     state.idList.splice(state.idList.indexOf(item),1)
-                }else if(task.localState === 'going' && state.newIdList.indexOf(item) === -1){
+                }else if(task.localState === 'going' && state.newIdList.indexOf(item) === -1){      //未更新状态列表缓存时间小于3天的going状态任务，存入任务列表
+                    console.log('cache going');
                     state.taskList.push(task)
                     state.newIdList.push(item)
                 }
@@ -399,11 +409,10 @@ export default {
             concatCompletedTask()
             state.initTimes++
         }
-        !state.isSdk2 && getCache()
-        
+        // !state.isSdk2 && getCache()
         onMounted(() => {
             window.AdSDK.addEventListener('ad_show',adShow)
-            vueState.EventEmitter.immediately('afterRegist',initProxyLocalStorage(init),vueState.pageStatus.afterRegist)
+            vueState.EventEmitter.immediately('afterRegist',()=>{initProxyLocalStorage(init)},vueState.pageStatus.afterRegist)
         })
         onUnmounted(()=>{
             window.AdSDK.removeEventListener('ad_show',adShow)
