@@ -101,8 +101,12 @@ export default {
             clickTask:debounce(async(item)=> {
                 switch (item.localState) {
                     case 'start':
-                        track(item.trackingURL)
-                        openBrowser(item.landingPage ? item.landingPage : item.trackingURL)
+                        if(item.landingPage){
+                            track(item.trackingURL)
+                            openBrowser(item.landingPage)
+                        }else{
+                            openBrowser(item.trackingURL)
+                        }
                         break;
                     case 'going':
                         openBrowser(item.landingPage ? item.landingPage : item.trackingURL)
@@ -181,7 +185,7 @@ export default {
             state.idList && state.idList.length && state.idList.forEach((item)=>{       //获取本地缓存任务
                 state.cacheList.push(JSON.parse(localStorage.getItem(item)))
             })
-            console.log('getCache',state.cacheList);
+            console.log('getCache',state.cacheList,state.idList);
         }
         /**
          * @description: getData:获取服务端数据
@@ -193,7 +197,7 @@ export default {
             try{
                 const task = await GetTask({
                     bundle:vueState.bundle,
-                    extension:vueState.pageInfo.header?.country || 'IN',
+                    extension:vueState.pageInfo.channel || '',
                     bundleList:['BTC'],
                     options:{noCompleted:true}
                 })
@@ -243,7 +247,7 @@ export default {
                 if(list[i].state === 'completed'){
                     completed++
                 }
-                if(list[i].state === ''){
+                if(list[i].state === 'get'){
                     undone++
                 }
             }
@@ -298,9 +302,10 @@ export default {
                         state.newIdList.push(item)
                         console.log(state.completedList);
                     }else if(task.localState === 'completed' && new Date().getTime()-task.localTs >= 259200000){   //如果任务状态为‘completed’且缓存时间大于等于3天删除本地缓存
-                        console.log('delete completed');
+                        
                         localStorage.removeItem(item)
                         state.idList.splice(index,1)
+                        console.log('delete completed',state,item,index);
                     }else{     //其余情况存入更新状态列表，刷新任务状态
                         state.offersList.push({channel:task.bundleId,offerId:task.offerId})
                         state.unUpdateIdList.push(task.offerId)
@@ -355,9 +360,9 @@ export default {
                     state.newIdList.push(item)
                     console.log('cache done');
                 }else if(new Date().getTime() - task.localTs >= 259200000){       //未更新状态列表内任务缓存时间是否大于三天，大于则删除
-                    console.log('remove');
                     localStorage.removeItem(item)   
                     state.idList.splice(state.idList.indexOf(item),1)
+                    console.log('remove',state,item);
                 }else if(task.localState === 'going' && state.newIdList.indexOf(item) === -1){      //未更新状态列表缓存时间小于3天的going状态任务，存入任务列表
                     console.log('cache going');
                     state.taskList.push(task)
@@ -408,6 +413,9 @@ export default {
             updateCache()
             concatCompletedTask()
             state.initTimes++
+            state.cacheList = []
+            state.newIdList = []
+            console.log('init',state);
         }
         // !state.isSdk2 && getCache()
         onMounted(() => {

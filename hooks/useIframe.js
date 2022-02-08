@@ -41,7 +41,7 @@ const resetLocalstorgeMethod = () => {
             oldFunc.apply(this, arguments)
             return window.localStorage.removeItem
         }
-    })()
+    })(window.localStorage.removeItem)
 }
 
 export const initProxyLocalStorage = (callback) => {
@@ -54,18 +54,20 @@ export const initProxyLocalStorage = (callback) => {
         'message',
         (event) => {
             const { body } = event.data
-            if (body?.type === 'proxy-featch-localstorage') {
+            if ((body === null || body === void 0 ? void 0 : body.type) === 'proxy-featch-localstorage') {
                 const responseData = body.responseData
                 responseData.forEach((item) => {
                     const { key, value } = item
                     window.localStorage.setItem(key, value)
                 })
             }
+            callback && callback()
         },
         false
     )
-    initIframe(callback)
     resetLocalstorgeMethod()
+    initIframe()
+    
 }
 
 // initProxyLocalStorage();
