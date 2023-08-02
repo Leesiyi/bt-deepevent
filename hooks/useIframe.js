@@ -65,8 +65,8 @@ export const initProxyLocalStorage = (callback) => {
         },
         false
     )
-    resetLocalstorgeMethod()
     initIframe()
+    resetLocalstorgeMethod()
     
 }
 

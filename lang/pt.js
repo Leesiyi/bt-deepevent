@@ -26,7 +26,6 @@ export const deepEventPt = {
     'To participate in the event, switch phones or invite friends to complete tasks and earn commissions':'Para participar do evento, troque de telefone ou convide amigos para completar tarefas e ganhar comissões',
     'Only':'Apenas',
     'left to':'esquerda para',
-    'Withdrawal':'Retirada',
     'Complete':'Complete',
     'tasks to unlock':'tarefas para desbloquear',
     'You need to complete':'Você precisa completar',
